@@ -1,6 +1,7 @@
 package com.wangzb.wiki.controller;
 
 import com.wangzb.wiki.domain.Ebook;
+import com.wangzb.wiki.resp.CommonResp;
 import com.wangzb.wiki.service.EbookService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +24,16 @@ public class EbookController {
     @Resource
     private EbookService ebookService;
 
-    @GetMapping("/list")//不用在写Ebook了,其实可以改进一下
-    public List<Ebook> list(){
-        return ebookService.list();
+//    @GetMapping("/list")
+//    public List<Ebook> list(){
+//        return ebookService.list();
+//    }
+    @GetMapping("/list")
+    public CommonResp list(){
+        CommonResp<List<Ebook>> ebookCommonResp = new CommonResp<>();
+        List<Ebook> list = ebookService.list();
+        ebookCommonResp.setContent(list);
+        return ebookCommonResp;
     }
 
 }
