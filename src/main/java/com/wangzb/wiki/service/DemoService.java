@@ -16,6 +16,7 @@ public class DemoService {
     @Resource
     private DemoMapper demoMapper;
 
+
     public List<Demo> list(){
         return demoMapper.selectByExample(null);
     }

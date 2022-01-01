@@ -16,15 +16,26 @@ import static com.sun.tools.attach.VirtualMachine.list;
 
 @RestController
 
+//public class DemoController {
+//
+//
+//    @Resource
+//    private DemoService DemoService;
+//
+//    @GetMapping("/Demo/list")//每次都要写Demo,其实可以改进一下
+//    public List<Demo> list(){
+//        return DemoService.list();
+//    }
+//
+//}
+@RequestMapping("/Demo")
 public class DemoController {
 
-    @Value("${Demo.hello}")
-    private String DemoHello;
 
     @Resource
     private DemoService DemoService;
 
-    @GetMapping("/Demo/list")
+    @GetMapping("/list")//不用在写Demo了,其实可以改进一下
     public List<Demo> list(){
         return DemoService.list();
     }
