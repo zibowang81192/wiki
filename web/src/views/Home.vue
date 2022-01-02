@@ -62,7 +62,11 @@
           </a-menu>
         </a-layout-sider>
         <a-layout-content :style="{ padding: '0 24px', minHeight: '280px' }">
-          Content
+          <pre>
+{{ebooks}}
+{{ebooks1}}
+          </pre>
+
         </a-layout-content>
       </a-layout>
     </a-layout-content>
@@ -70,16 +74,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import {defineComponent, onMounted, reactive, ref, toRef} from 'vue';
 import axios from 'axios';
 
 export default defineComponent({
   name: 'Home',
   setup(){
     console.log("setup");
-    axios.get("http://localhost:8880/Ebook/list?name=Java").then((response)=>{
-      console.log(response);
+    const ebooks = ref();
+    const ebooks1 = reactive({books: []});
+
+    onMounted(()=>{
+      console.log("onMounted");
+      axios.get("http://localhost:8880/Ebook/list?name=Java").then((response)=>{
+        const data = response.data;
+        ebooks.value = data.content;
+        ebooks1.books = data.content;
+        console.log(response);
+      });
     })
+    return {
+      ebooks,
+      ebooks1 : toRef(ebooks1,"books")
+    }
   }
 });
+
 </script>
