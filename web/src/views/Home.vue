@@ -1,5 +1,5 @@
 <template>
-  <a-layout>
+  <a-layout class="box">
     <a-layout-sider width="200" style="background: #fff">
       <a-menu
           v-model:selectedKeys="selectedKeys2"
@@ -87,3 +87,8 @@ export default defineComponent({
 });
 
 </script>
+<style>
+.box {
+  display: flex;
+}
+</style>
