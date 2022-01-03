@@ -113,11 +113,11 @@ export default defineComponent({
     const actions: Record<string, string>[] = [
       { type: 'StarOutlined', text: '156' },
       { type: 'LikeOutlined', text: '156' },
-      { type: 'MessageOutlined', text: '3' },
+      { type: 'MessageOutlined', text: '7' },
     ];
       onMounted(()=>{
         console.log("onMounted");
-        axios.get(process.env.VUE_APP_SERVER+"/Ebook/list").then((response)=>{
+        axios.get("/Ebook/list").then((response)=>{
           const data = response.data;
           ebooks.value = data.content;
           console.log(response);
