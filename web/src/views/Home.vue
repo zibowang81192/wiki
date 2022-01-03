@@ -48,7 +48,7 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <a-list item-layout="vertical" size="large"  :grid="{ gutter: 40, column: 3 }" :data-source="ebooks">
+      <a-list item-layout="vertical" size="large"  :grid="{ gutter: 25, column: 3 }" :data-source="ebooks">
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
@@ -60,7 +60,7 @@
 
             <a-list-item-meta :description="item.description">
               <template #title>
-                <a :href="item.href">{{ item.title }}</a>
+                <a :href="item.href">{{ item.name }}</a>
               </template>
               <template #avatar><a-avatar :src="item.cover" /></template>
             </a-list-item-meta>
@@ -117,7 +117,7 @@ export default defineComponent({
     ];
       onMounted(()=>{
         console.log("onMounted");
-        axios.get("http://localhost:8880/Ebook/list?name=Java").then((response)=>{
+        axios.get("http://localhost:8880/Ebook/list").then((response)=>{
           const data = response.data;
           ebooks.value = data.content;
           console.log(response);
@@ -137,5 +137,15 @@ export default defineComponent({
 <style>
 .box {
   display: flex;
+}
+</style>
+
+<style scoped>
+.ant-avatar {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 8%;
+  margin: 5px 0;
 }
 </style>

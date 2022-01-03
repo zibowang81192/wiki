@@ -1,5 +1,6 @@
 package com.wangzb.wiki.service;
 
+import com.mysql.cj.util.StringUtils;
 import com.wangzb.wiki.domain.Ebook;
 
 import com.wangzb.wiki.domain.EbookExample;
@@ -10,6 +11,7 @@ import com.wangzb.wiki.resp.EbookResp;
 import com.wangzb.wiki.util.CopyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 
@@ -26,7 +28,9 @@ public class EbookService {
     public List<EbookResp> list(EbookReq ebookReq){
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
-        criteria.andNameLike("%" + ebookReq.getName() + "%");
+        if (!ObjectUtils.isEmpty(ebookReq.getName())){ //动态SQL
+            criteria.andNameLike("%" + ebookReq.getName() + "%");
+        }
         //return ebookMapper.selectByExample(ebookExample);
         List<Ebook> ebooksList = ebookMapper.selectByExample(ebookExample);
 
