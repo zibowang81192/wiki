@@ -1,5 +1,7 @@
 package com.wangzb.wiki.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mysql.cj.util.StringUtils;
 import com.wangzb.wiki.domain.Ebook;
 
@@ -9,7 +11,8 @@ import com.wangzb.wiki.mapper.EbookMapper;
 import com.wangzb.wiki.req.EbookReq;
 import com.wangzb.wiki.resp.EbookResp;
 import com.wangzb.wiki.util.CopyUtil;
-import org.springframework.beans.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -20,6 +23,8 @@ import java.util.List;
 
 @Service
 public class EbookService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
 
     @Resource
     private EbookMapper ebookMapper;
@@ -32,7 +37,13 @@ public class EbookService {
             criteria.andNameLike("%" + ebookReq.getName() + "%");
         }
         //return ebookMapper.selectByExample(ebookExample);
+        PageHelper.startPage(1,3);
         List<Ebook> ebooksList = ebookMapper.selectByExample(ebookExample);
+
+        PageInfo<Ebook> pageInfo = new PageInfo<>(ebooksList);
+        LOG.info("总行数：{}", pageInfo.getTotal());
+        LOG.info("总页数：{}", pageInfo.getPages());
+
 
 //        List<EbookResp> respList = new ArrayList<>();
 //        for(Ebook ebook : ebooksList){
