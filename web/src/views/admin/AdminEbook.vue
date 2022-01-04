@@ -35,6 +35,7 @@
 import {defineComponent, onMounted, reactive, ref, toRef} from 'vue';
 import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
+import {message} from "ant-design-vue";
 
 const listData: Record<string, string>[] = [];
 
@@ -61,20 +62,24 @@ export default defineComponent({
 
   setup() {
     console.log("setup");
+
+    const param = ref();
+    param.value={};
+
     const ebooks = ref();
-    const pagination = {
-      onChange: (page: number) => {
-        console.log(page);
-      },
+    // const pagination = {
+    //   onChange: (page: number) => {
+    //     console.log(page);
+    //   },
+    //   pageSize: 2,
+    //   total: 0
+    // };
+
+    const pagination = ref({
+      current: 1,
       pageSize: 2,
       total: 0
-    };
-
-    // const pagination = ref({
-    //   current: 1,
-    //   pageSize: 10,
-    //   total: 0
-    // });
+    });
     const loading =ref(false);
 
     const columns = [
@@ -119,11 +124,17 @@ export default defineComponent({
 
     const handleQuery=(params:any)=>{
       loading.value = true;
-      axios.get("/Ebook/list").then((response)=>{
+      axios.get("/Ebook/list",
+          {params: {
+              page: params.page,
+              size: params.size
+            }}).then((response)=>{
         loading.value = false;
         const data = response.data;
-        ebooks.value = data.content;
-
+        ebooks.value = data.content.list;
+        // 重置分页按钮
+        pagination.value.current = params.page;
+        pagination.value.total = data.content.total;
         //pagination.value.current = params.page;
       });
     }
@@ -146,7 +157,10 @@ export default defineComponent({
     // ];
     onMounted(()=>{
       console.log("onMounted");
-      handleQuery({});
+      handleQuery({
+        page: 1,
+        size: pagination.value.pageSize
+      });
     })
 
     return {
