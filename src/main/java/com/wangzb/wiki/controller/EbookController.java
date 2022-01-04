@@ -4,6 +4,7 @@ import com.wangzb.wiki.domain.Ebook;
 import com.wangzb.wiki.req.EbookReq;
 import com.wangzb.wiki.resp.CommonResp;
 import com.wangzb.wiki.resp.EbookResp;
+import com.wangzb.wiki.resp.PageResp;
 import com.wangzb.wiki.service.EbookService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +33,8 @@ public class EbookController {
 //    }
     @GetMapping("/list")
     public CommonResp list(EbookReq ebookReq){
-        CommonResp<List<EbookResp>> ebookCommonResp = new CommonResp<>();
-        List<EbookResp> list = ebookService.list(ebookReq);
+        CommonResp<PageResp<EbookResp>> ebookCommonResp = new CommonResp<>();
+        PageResp<EbookResp> list = ebookService.list(ebookReq);
         ebookCommonResp.setContent(list);
         return ebookCommonResp;
     }

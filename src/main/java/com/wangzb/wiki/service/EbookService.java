@@ -10,6 +10,7 @@ import com.wangzb.wiki.mapper.EbookMapper;
 
 import com.wangzb.wiki.req.EbookReq;
 import com.wangzb.wiki.resp.EbookResp;
+import com.wangzb.wiki.resp.PageResp;
 import com.wangzb.wiki.util.CopyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +31,14 @@ public class EbookService {
     private EbookMapper ebookMapper;
 
 
-    public List<EbookResp> list(EbookReq ebookReq){
+    public PageResp<EbookResp> list(EbookReq ebookReq){
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(ebookReq.getName())){ //动态SQL
             criteria.andNameLike("%" + ebookReq.getName() + "%");
         }
         //return ebookMapper.selectByExample(ebookExample);
-        PageHelper.startPage(1,3);
+        PageHelper.startPage(ebookReq.getPage(), ebookReq.getSize());
         List<Ebook> ebooksList = ebookMapper.selectByExample(ebookExample);
 
         PageInfo<Ebook> pageInfo = new PageInfo<>(ebooksList);
@@ -58,8 +59,13 @@ public class EbookService {
 //
 //            // ebookResp.setId(123L);
 //        }
+
         List<EbookResp> respList = CopyUtil.copyList(ebooksList,EbookResp.class);//工具类列表复制
-        return respList;
+        PageResp<EbookResp> pageResp = new PageResp<>();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(respList);
+
+        return pageResp;
 
     }
 }
