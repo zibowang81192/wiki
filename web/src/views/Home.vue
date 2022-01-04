@@ -78,19 +78,19 @@ import {defineComponent, onMounted, reactive, ref, toRef} from 'vue';
 import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
 
-const listData: Record<string, string>[] = [];
-
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'https://www.antdv.com/',
-    title: `ant design vue part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
+// const listData: Record<string, string>[] = [];
+//
+// for (let i = 0; i < 23; i++) {
+//   listData.push({
+//     href: 'https://www.antdv.com/',
+//     title: `ant design vue part ${i}`,
+//     avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+//     description:
+//         'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+//     content:
+//         'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+//   });
+// }
 
 export default defineComponent({
   name: 'Home',
@@ -115,18 +115,33 @@ export default defineComponent({
       { type: 'LikeOutlined', text: '156' },
       { type: 'MessageOutlined', text: '7' },
     ];
+
+    const handleQuery=(params:any)=>{
+      axios.get("/Ebook/list",
+          {params: {
+              page: params.page,
+              size: params.size
+            }}).then((response)=>{
+        const data = response.data;
+        ebooks.value = data.content.list;
+
+      });
+    }
       onMounted(()=>{
         console.log("onMounted");
-        axios.get("/Ebook/list").then((response)=>{
-          const data = response.data;
-          ebooks.value = data.content;
-          console.log(response);
-        });
+        handleQuery({
+          page: 1,
+          size: 1000
+        })
+        // axios.get("/Ebook/list").then((response)=>{
+        //   const data = response.data;
+        //   ebooks.value = data.content;
+        //   console.log(response);
+        // });
       })
 
     return {
       ebooks,
-      listData,
       pagination,
       actions,
     };
