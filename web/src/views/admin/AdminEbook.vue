@@ -17,7 +17,7 @@
       </template>
       <template v-slot:action="{text, record}">
         <a-space size="small">
-          <a-button type="primary">
+          <a-button type="primary" @click="edit">
             编辑
           </a-button>
           <a-button type="danger">
@@ -26,6 +26,15 @@
         </a-space>
       </template>
     </a-table>
+
+    <a-modal
+        title="电子书表单"
+        v-model:visible="modalVisible"
+        :confirm-loading="modalLoading"
+        @ok="handleModalOk"
+    >
+      <p>Test</p>
+    </a-modal>
 
   </a-layout-content>
 
@@ -155,6 +164,26 @@ export default defineComponent({
     //   { type: 'LikeOutlined', text: '156' },
     //   { type: 'MessageOutlined', text: '7' },
     // ];
+
+    /**
+     *  编辑
+     */
+
+    const modalVisible = ref<boolean>(false);
+    const modalLoading = ref<boolean>(false);
+
+    const handleModalOk = () => {
+      modalLoading.value = true;
+      setTimeout(() => {
+        modalVisible.value = false;
+        modalLoading.value = false;
+      }, 2000);
+    };
+
+    const edit = () => {
+      modalVisible.value = true;
+    }
+
     onMounted(()=>{
       console.log("onMounted");
       handleQuery({
@@ -169,6 +198,12 @@ export default defineComponent({
       columns,
       loading,
       handleTableChange,
+
+      edit,
+      modalVisible,
+      modalLoading,
+      handleModalOk
+
     };
   },
 });
