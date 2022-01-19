@@ -26,9 +26,18 @@
           <a-button type="primary" @click="edit(record)">
             编辑
           </a-button>
-          <a-button type="danger">
-            删除
-          </a-button>
+          <a-popconfirm
+              title="Are you sure delete this task?"
+              ok-text="Yes"
+              cancel-text="No"
+              @confirm="handleDelete(record.id)"
+              @cancel="cancel"
+          >
+            <a-button type="danger">
+              删除
+            </a-button>
+          </a-popconfirm>
+
         </a-space>
       </template>
     </a-table>
@@ -118,6 +127,11 @@ export default defineComponent({
       title: 'Cover',
       dataIndex: 'cover',
       slots: {customRender: 'cover'}
+      },
+      {
+        title: 'id',
+        dataIndex: 'id',
+        slots: {customRender: 'id'}
       },
       {
         title: 'Name',
@@ -227,6 +241,19 @@ export default defineComponent({
       ebook.value = {};
     }
 
+    const handleDelete = (id: number) =>{
+      let temp = 2
+      axios.delete("/Ebook/delete/" + id).then((response) => {
+        const data = response.data;
+        if(data.success){
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize,
+          })
+        }
+      });
+    };
+
     onMounted(()=>{
       console.log("onMounted");
       handleQuery({
@@ -247,7 +274,8 @@ export default defineComponent({
       add,
       modalVisible,
       modalLoading,
-      handleModalOk
+      handleModalOk,
+      handleDelete,
 
     };
   },
