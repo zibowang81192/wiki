@@ -1,22 +1,14 @@
 package com.wangzb.wiki.controller;
 
-import com.wangzb.wiki.domain.Ebook;
-import com.wangzb.wiki.req.EbookReq;
+import com.wangzb.wiki.req.EbookQueryReq;
+import com.wangzb.wiki.req.EbookSaveReq;
 import com.wangzb.wiki.resp.CommonResp;
-import com.wangzb.wiki.resp.EbookResp;
+import com.wangzb.wiki.resp.EbookQueryResp;
 import com.wangzb.wiki.resp.PageResp;
 import com.wangzb.wiki.service.EbookService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
-
-import static com.sun.tools.attach.VirtualMachine.list;
 
 @RestController
 
@@ -32,11 +24,18 @@ public class EbookController {
 //        return ebookService.list();
 //    }
     @GetMapping("/list")
-    public CommonResp list(EbookReq ebookReq){
-        CommonResp<PageResp<EbookResp>> ebookCommonResp = new CommonResp<>();
-        PageResp<EbookResp> list = ebookService.list(ebookReq);
+    public CommonResp list(EbookQueryReq ebookReq){
+        CommonResp<PageResp<EbookQueryResp>> ebookCommonResp = new CommonResp<>();
+        PageResp<EbookQueryResp> list = ebookService.list(ebookReq);
         ebookCommonResp.setContent(list);
         return ebookCommonResp;
+    }
+
+    @PostMapping("/save")
+    public CommonResp save(@RequestBody EbookSaveReq req){
+        CommonResp resp = new CommonResp<>();
+        ebookService.save(req);
+        return resp;
     }
 
 }

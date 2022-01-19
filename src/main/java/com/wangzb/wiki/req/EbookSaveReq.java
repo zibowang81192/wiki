@@ -1,7 +1,6 @@
-package com.wangzb.wiki.resp;
-/*建立此类的目的是，后端往往不会把所有信息如密码等返回前端，所以需要再封装一下*/
-public class EbookResp {
+package com.wangzb.wiki.req;
 
+public class EbookSaveReq {
     private Long id;
 
     private String name;

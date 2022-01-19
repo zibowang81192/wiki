@@ -2,14 +2,14 @@ package com.wangzb.wiki.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mysql.cj.util.StringUtils;
 import com.wangzb.wiki.domain.Ebook;
 
 import com.wangzb.wiki.domain.EbookExample;
 import com.wangzb.wiki.mapper.EbookMapper;
 
-import com.wangzb.wiki.req.EbookReq;
-import com.wangzb.wiki.resp.EbookResp;
+import com.wangzb.wiki.req.EbookQueryReq;
+import com.wangzb.wiki.req.EbookSaveReq;
+import com.wangzb.wiki.resp.EbookQueryResp;
 import com.wangzb.wiki.resp.PageResp;
 import com.wangzb.wiki.util.CopyUtil;
 import org.slf4j.Logger;
@@ -19,7 +19,6 @@ import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,7 +30,7 @@ public class EbookService {
     private EbookMapper ebookMapper;
 
 
-    public PageResp<EbookResp> list(EbookReq ebookReq){
+    public PageResp<EbookQueryResp> list(EbookQueryReq ebookReq){
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(ebookReq.getName())){ //动态SQL
@@ -60,12 +59,28 @@ public class EbookService {
 //            // ebookResp.setId(123L);
 //        }
 
-        List<EbookResp> respList = CopyUtil.copyList(ebooksList,EbookResp.class);//工具类列表复制
-        PageResp<EbookResp> pageResp = new PageResp<>();
+        List<EbookQueryResp> respList = CopyUtil.copyList(ebooksList, EbookQueryResp.class);//工具类列表复制
+        PageResp<EbookQueryResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(respList);
 
         return pageResp;
+
+    }
+
+    /**
+     * 保存
+     */
+    public void save(EbookSaveReq req){
+        Ebook ebook = CopyUtil.copy(req, Ebook.class);
+        if(ObjectUtils.isEmpty(req.getId())){
+            //新增
+            ebookMapper.insert(ebook);
+        }
+        else{
+            //更新
+            ebookMapper.updateByPrimaryKey(ebook);
+        }
 
     }
 }

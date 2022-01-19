@@ -40,12 +40,11 @@
         <a-form-item label="name">
           <a-input v-model:value="ebook.name" />
         </a-form-item>
-        <a-form-item label="category">
-          <a-cascader
-              v-model:value="categoryIds"
-              :field-names="{ label: 'name', value: 'id', children: 'children' }"
-              :options="level1"
-          />
+        <a-form-item label="category 1">
+          <a-input v-model:value="ebook.category1Id" />
+        </a-form-item>
+        <a-form-item label="category 2">
+          <a-input v-model:value="ebook.category2Id" />
         </a-form-item>
         <a-form-item label="description">
           <a-input v-model:value="ebook.description" type="textarea" />
@@ -121,12 +120,12 @@ export default defineComponent({
       },
       {
         title: 'Category 1',
-        dataIndex: 'category_id_1',
+        dataIndex: 'category1Id',
         slots: {customRender: 'name'}
       },
       {
         title: 'Category 2',
-        dataIndex: 'category_id_2',
+        dataIndex: 'category2Id',
         slots: {customRender: 'name'}
       },
       {
@@ -140,6 +139,10 @@ export default defineComponent({
       {
         title: 'Comment',
         dataIndex: 'comment_count'
+      },
+      {
+        title: 'Description',
+        dataIndex: 'description'
       },
       {
         title: 'Action',
@@ -192,10 +195,20 @@ export default defineComponent({
 
     const handleModalOk = () => {
       modalLoading.value = true;
-      setTimeout(() => {
-        modalVisible.value = false;
-        modalLoading.value = false;
-      }, 2000);
+      axios.post("/Ebook/save",
+          ebook.value).then((response)=> {
+        const data = response.data;
+        if(data.success){  /** data的类型是CommonResp **/
+          modalVisible.value = false;
+          modalLoading.value = false;
+
+          //重新加载列表
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize,
+          });
+        }
+      });
     };
 
     const edit = (record: any) => {
