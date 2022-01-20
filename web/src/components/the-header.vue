@@ -14,7 +14,10 @@
         <router-link to="/">Home</router-link>
       </a-menu-item>
       <a-menu-item key="3">
-        <router-link to="/admin/ebook">Admin</router-link>
+        <router-link to="/admin/ebook">EbookAdmin</router-link>
+      </a-menu-item>
+      <a-menu-item key="4">
+        <router-link to="/admin/category">CategoryAdmin</router-link>
       </a-menu-item>
     </a-menu>
   </a-layout-header>
