@@ -32,6 +32,7 @@ public class CategoryService {
 
     public PageResp<CategoryQueryResp> list(CategoryQueryReq categoryReq){
         CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("sort asc");
         CategoryExample.Criteria criteria = categoryExample.createCriteria();
         if (!ObjectUtils.isEmpty(categoryReq.getName())){ //动态SQL
             criteria.andNameLike("%" + categoryReq.getName() + "%");
@@ -66,6 +67,20 @@ public class CategoryService {
 
         return pageResp;
 
+    }
+
+    /**
+     * 全表查询
+     */
+    public List<CategoryQueryResp> all(){
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("sort asc");
+        //return categoryMapper.selectByExample(categoryExample);
+        List<Category> categorysList = categoryMapper.selectByExample(categoryExample);
+
+        List<CategoryQueryResp> respList = CopyUtil.copyList(categorysList, CategoryQueryResp.class);//工具类列表复制
+
+        return respList;
     }
 
     /**

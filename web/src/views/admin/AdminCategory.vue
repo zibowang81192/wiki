@@ -19,7 +19,7 @@
         <a-form-item>
           <a-button
               type="primary"
-              @click="handleQuery({page: 1,size: pagination.pageSize})"
+              @click="handleQuery()"
           >
             查询
           </a-button>
@@ -36,9 +36,8 @@
     <a-table :columns="columns"
              :row-key="record=> record.id"
              :data-source="categorys"
-             :pagination="pagination"
              :loading="loading"
-             @change="handleTableChange"
+             :pagination="false"
     >
       <template #cover="{text: cover}">
         <img v-if="cover" :src="cover" alt="avatar">
@@ -124,19 +123,7 @@ export default defineComponent({
     param.value={};
 
     const categorys = ref();
-    // const pagination = {
-    //   onChange: (page: number) => {
-    //     console.log(page);
-    //   },
-    //   pageSize: 2,
-    //   total: 0
-    // };
 
-    const pagination = ref({
-      current: 1,
-      pageSize: 10,
-      total: 0
-    });
     const loading =ref(false);
 
     const columns = [
@@ -162,22 +149,13 @@ export default defineComponent({
       }
     ];
 
-    const handleQuery=(params:any)=>{
+    const handleQuery=()=>{
       loading.value = true;
-      axios.get("/Category/list",
-          {params: {
-              page: params.page,
-              size: params.size,
-              name: param.value.name
-            }}).then((response)=>{
+      axios.get("/Category/all").then((response)=>{
         loading.value = false;
         const data = response.data;
         if(data.success){
-          categorys.value = data.content.list;
-          // 重置分页按钮
-          pagination.value.current = params.page;
-          pagination.value.total = data.content.total;
-          //pagination.value.current = params.page;
+          categorys.value = data.content;
         }
         else {
           message.error(data.message);
@@ -185,23 +163,6 @@ export default defineComponent({
 
       });
     }
-
-    /**
-     *  表格点击页码时触发
-     */
-    const handleTableChange = (pagination: any) => {
-      console.log("看看自带的分页参数都有啥：" + pagination);
-      handleQuery({
-        page: pagination.current,
-        size: pagination.pageSize
-      });
-    };
-
-    // const actions: Record<string, string>[] = [
-    //   { type: 'StarOutlined', text: '156' },
-    //   { type: 'LikeOutlined', text: '156' },
-    //   { type: 'MessageOutlined', text: '7' },
-    // ];
 
     /**
      *  编辑
@@ -221,11 +182,7 @@ export default defineComponent({
 
 
           //重新加载列表
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize,
-            name: param.value.name,
-          });
+          handleQuery();
         }
         else{
           message.error(data.message);
@@ -249,30 +206,22 @@ export default defineComponent({
       axios.delete("/Category/delete/" + id).then((response) => {
         const data = response.data;
         if(data.success){
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize,
-          })
+          handleQuery()
         }
       });
     };
 
     onMounted(()=>{
       console.log("onMounted");
-      handleQuery({
-        page: 1,
-        size: pagination.value.pageSize
-      });
+      handleQuery();
     })
 
     return {
       param,
       category,
       categorys,
-      pagination,
       columns,
       loading,
-      handleTableChange,
       handleQuery,
 
       edit,
