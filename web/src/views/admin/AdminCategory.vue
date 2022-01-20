@@ -75,6 +75,20 @@
         </a-form-item>
         <a-form-item label="parent">
           <a-input v-model:value="category.parent" />
+          <a-select
+              ref="select"
+              v-model:value="category.parent"
+              style="width: 120px"
+              @focus="focus"
+              @change="handleChange"
+          >
+            <a-select-option value="0">无</a-select-option>
+            <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="category.id === c.id">
+              {{c.name}}
+            </a-select-option>
+
+          </a-select>
+
         </a-form-item>
         <a-form-item label="sort">
           <a-input v-model:value="category.sort" />
@@ -226,7 +240,7 @@ export default defineComponent({
     return {
       param,
       category,
-      categorys,
+      //categorys,
       level1,
       columns,
       loading,
