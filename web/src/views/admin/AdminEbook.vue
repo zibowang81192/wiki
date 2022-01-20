@@ -98,6 +98,7 @@ import {defineComponent, onMounted, reactive, ref, toRef} from 'vue';
 import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
 import {message} from "ant-design-vue";
+import {Tool} from "@/util/tool";
 
 const listData: Record<string, string>[] = [];
 
@@ -267,7 +268,7 @@ export default defineComponent({
 
     const edit = (record: any) => {
       modalVisible.value = true;
-      ebook.value = record;
+      ebook.value = Tool.copy(record);
     }
 
     const add = () => {
