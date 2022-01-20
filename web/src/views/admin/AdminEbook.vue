@@ -226,7 +226,7 @@ export default defineComponent({
         const data = response.data;
         if(data.success){  /** data的类型是CommonResp **/
           modalVisible.value = false;
-          modalLoading.value = false;
+
 
           //重新加载列表
           handleQuery({
@@ -234,6 +234,10 @@ export default defineComponent({
             size: pagination.value.pageSize,
           });
         }
+        else{
+          message.error(data.message);
+        }
+        modalLoading.value = false;
       });
     };
 
