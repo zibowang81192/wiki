@@ -244,7 +244,7 @@ public class EbookExample {
             return (Criteria) this;
         }
 
-        public Criteria andCategory1IdEqualTo(Long value) {
+        public Criteria andCategory1IdEqualTo(String value) {
             addCriterion("category1_id =", value, "category1Id");
             return (Criteria) this;
         }

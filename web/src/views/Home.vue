@@ -105,7 +105,8 @@ export default defineComponent({
       axios.get("/Ebook/list",
           {params: {
               page: params.page,
-              size: params.size
+              size: params.size,
+              categoryId2: params.categoryId2,
             }}).then((response)=>{
         const data = response.data;
         ebooks.value = data.content.list;
@@ -141,6 +142,11 @@ export default defineComponent({
         isShowWelcome.value = true;
       } else {
         categoryId2 = value.key;
+        handleQuery({
+          page: 1,
+          size: 1000,
+          categoryId2: categoryId2,
+        })
         isShowWelcome.value = false;
       }
       // isShowWelcome.value = value.key === 'welcome';
@@ -151,7 +157,8 @@ export default defineComponent({
         handleCategoryQuery();
         handleQuery({
           page: 1,
-          size: 1000
+          size: 1000,
+          categoryId2: categoryId2,
         })
         // axios.get("/Ebook/list").then((response)=>{
         //   const data = response.data;

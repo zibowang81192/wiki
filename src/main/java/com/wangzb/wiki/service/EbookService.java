@@ -39,6 +39,9 @@ public class EbookService {
         if (!ObjectUtils.isEmpty(ebookReq.getName())){ //动态SQL
             criteria.andNameLike("%" + ebookReq.getName() + "%");
         }
+        if (!ObjectUtils.isEmpty(ebookReq.getCategoryId2())){ //动态SQL
+            criteria.andCategory2IdEqualTo(ebookReq.getCategoryId2());
+        }
         //return ebookMapper.selectByExample(ebookExample);
         PageHelper.startPage(ebookReq.getPage(), ebookReq.getSize());
         List<Ebook> ebooksList = ebookMapper.selectByExample(ebookExample);
