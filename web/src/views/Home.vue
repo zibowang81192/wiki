@@ -29,7 +29,7 @@
         <h1>Welcome to Zibo Wang's Wiki</h1>
 
       </div>
-      <a-list v-show="!isShowWelcome" item-layout="vertical" size="large"  :grid="{ gutter: 25, column: 3 }" :data-source="ebooks">
+      <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :data-source="ebooks">
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
@@ -43,7 +43,7 @@
               <template #title>
                 <a :href="item.href">{{ item.name }}</a>
               </template>
-              <template #avatar><a-avatar :src="item.cover" /></template>
+              <template #avatar><a-avatar :src="item.cover"/></template>
             </a-list-item-meta>
           </a-list-item>
         </template>
