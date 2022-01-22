@@ -213,7 +213,8 @@ export default defineComponent({
     /**
      *  编辑
      */
-    const doc = ref({});
+    const doc = ref();
+    doc.value = {};
     const treeSelectData = ref();
     treeSelectData.value = [];
 
@@ -225,6 +226,7 @@ export default defineComponent({
 
     const handleSave = () => {
       modalLoading.value = true;
+      doc.value.content = editor.txt.html();
       axios.post("/Doc/save",
           doc.value).then((response)=> {
         const data = response.data;
