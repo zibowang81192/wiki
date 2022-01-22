@@ -2,8 +2,8 @@
   <a-layout-content
       :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
   >
-    <a-row>
-      <a-col :span="12">
+    <a-row :gutter="24">
+      <a-col :span="8">
         <div class="admin-doc">
           <h1>Manage Documents</h1>
         </div>
@@ -39,13 +39,14 @@
                  :data-source="level1"
                  :loading="loading"
                  :pagination="false"
+                 size="small"
         >
-          <template #cover="{text: cover}">
-            <img v-if="cover" :src="cover" alt="avatar">
+          <template #name="{text, record}">
+            {{record.sort}}  {{text}}
           </template>
           <template v-slot:action="{text, record}">
             <a-space size="small">
-              <a-button type="primary" @click="edit(record)">
+              <a-button type="primary" size="small" @click="edit(record)">
                 编辑
               </a-button>
               <a-popconfirm
@@ -55,7 +56,7 @@
                   @confirm="showConfirm(record.id)"
                   @cancel="cancel"
               >
-                <a-button type="danger">
+                <a-button type="danger" size="small">
                   删除
                 </a-button>
               </a-popconfirm>
@@ -64,12 +65,19 @@
           </template>
         </a-table>
       </a-col>
-      <a-col :span="12">
-        <a-form :model="doc" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-          <a-form-item label="name">
-            <a-input v-model:value="doc.name" />
+      <a-col :span="16">
+        <p>
+          <a-form layout="inline" :model="param">
+            <a-button type="primary" @click="handleSave()">
+              保存
+            </a-button>
+          </a-form>
+        </p>
+        <a-form :model="doc" layout="vertical">
+          <a-form-item>
+            <a-input v-model:value="doc.name" placeholder="name"/>
           </a-form-item>
-          <a-form-item label="parent">
+          <a-form-item>
             <a-tree-select
                 v-model:value="doc.parent"
                 style="width: 100%"
@@ -81,10 +89,10 @@
             >
             </a-tree-select>
           </a-form-item>
-          <a-form-item label="sort">
-            <a-input v-model:value="doc.sort" />
+          <a-form-item>
+            <a-input v-model:value="doc.sort" placeholder="sort" />
           </a-form-item>
-          <a-form-item label="content">
+          <a-form-item>
             <div id="content"></div>
           </a-form-item>
         </a-form>
@@ -168,16 +176,7 @@ export default defineComponent({
         dataIndex: 'name',
         slots: {customRender: 'name'}
       },
-      {
-        title: 'Parent',
-        dataIndex: 'parent',
-        slots: {customRender: 'name'}
-      },
-      {
-        title: 'Sort',
-        dataIndex: 'sort',
-        slots: {customRender: 'name'}
-      },
+
       {
         title: 'Action',
         key: 'action',
@@ -217,8 +216,9 @@ export default defineComponent({
     const modalLoading = ref<boolean>(false);
 
     const editor = new E('#content');
+    editor.config.zIndex = 0;
 
-    const handleModalOk = () => {
+    const handleSave = () => {
       modalLoading.value = true;
       axios.post("/Doc/save",
           doc.value).then((response)=> {
@@ -248,9 +248,10 @@ export default defineComponent({
       // 为选择树添加一个“无”
       treeSelectData.value.unshift({id: 0, name: '无'});
 
-      setTimeout(function (){
-        editor.create();
-      })
+      // setTimeout(function (){
+      //   editor.create();
+      // },100);
+      editor.create();
     }
 
     const add = () => {
@@ -263,9 +264,10 @@ export default defineComponent({
       treeSelectData.value = Tool.copy(level1.value);
       // 为选择树添加一个“无”
       treeSelectData.value.unshift({id: 0, name: '无'});
-      setTimeout(function (){
-        editor.create();
-      })
+      // setTimeout(function (){
+      //   editor.create();
+      // },100);
+      editor.create();
 
     }
 
@@ -413,7 +415,7 @@ export default defineComponent({
       add,
       modalVisible,
       modalLoading,
-      handleModalOk,
+      handleSave,
       handleDelete,
       setDisable,
       getDeleteIds,
