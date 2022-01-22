@@ -51,7 +51,7 @@
               title="Are you sure delete this task?"
               ok-text="Yes"
               cancel-text="No"
-              @confirm="handleDelete(record.id)"
+              @confirm="showConfirm(record.id)"
               @cancel="cancel"
           >
             <a-button type="danger">
@@ -96,12 +96,13 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, reactive, ref, toRef} from 'vue';
+import {createVNode, defineComponent, onMounted, reactive, ref, toRef} from 'vue';
 import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue';
 import axios from 'axios';
-import {message} from "ant-design-vue";
+import {message, Modal} from "ant-design-vue";
 import {Tool} from "@/util/tool";
 import {useRoute} from "vue-router";
+import {ExclamationCircleOutlined} from "@ant-design/icons";
 
 const listData: Record<string, string>[] = [];
 
@@ -124,6 +125,7 @@ export default defineComponent({
     StarOutlined,
     LikeOutlined,
     MessageOutlined,
+    ExclamationCircleOutlined,
   },
 
   setup() {
@@ -256,6 +258,29 @@ export default defineComponent({
     };
 
     /**
+     * 二次确认删除
+     */
+    const names: Array<string> = [];
+
+    const showConfirm = (id: number) => {
+      names.splice(0);
+      getDeleteNames(level1.value, id);
+      Modal.confirm({
+        title: 'Do you Want to delete these items?',
+        icon: createVNode(ExclamationCircleOutlined),
+        content: createVNode('div', { style: 'color:red;' }, 'The following will be deleted: '+names.join(", ")),
+        onOk() {
+          console.log('OK');
+          handleDelete(id)
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+        class: 'test',
+      });
+    };
+
+    /**
      * 将某节点及其子孙节点全部置为disabled
      */
     const setDisable = (treeSelectData: any, id: any) => {
@@ -316,6 +341,36 @@ export default defineComponent({
       }
     };
 
+    /**
+     * 某节点及其子孙节点的名称
+     */
+
+
+    const getDeleteNames = (treeSelectData: any, id: any) => {
+      // console.log(treeSelectData, id);
+      // 遍历数组，即遍历某一层节点
+      for (let i = 0; i < treeSelectData.length; i++) {
+        const node = treeSelectData[i];
+        if (node.id === id) {
+
+          names.push(node.name);
+
+          const children = node.children;
+          if (Tool.isNotEmpty(children)) {
+            for (let j = 0; j < children.length; j++) {
+              getDeleteNames(children, children[j].id)
+            }
+          }
+        } else {
+          // 如果当前节点不是目标节点，则到其子节点再找找看。
+          const children = node.children;
+          if (Tool.isNotEmpty(children)) {
+            getDeleteNames(children, id);
+          }
+        }
+      }
+    };
+
     onMounted(()=>{
       console.log("onMounted");
       handleQuery();
@@ -338,7 +393,9 @@ export default defineComponent({
       handleModalOk,
       handleDelete,
       setDisable,
-      getDeleteIds
+      getDeleteIds,
+      showConfirm,
+      getDeleteNames
 
     };
   },
