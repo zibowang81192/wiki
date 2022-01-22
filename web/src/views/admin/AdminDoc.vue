@@ -245,8 +245,9 @@ export default defineComponent({
     }
 
     const handleDelete = (id: number) =>{
-      let temp = 2
-      axios.delete("/Doc/delete/" + id).then((response) => {
+      getDeleteIds(level1.value, id);
+      let temp = 2;
+      axios.delete("/Doc/delete/" + ids.join(",")).then((response) => {
         const data = response.data;
         if(data.success){
           handleQuery()
@@ -285,6 +286,36 @@ export default defineComponent({
       }
     };
 
+    const ids: Array<string> = [];
+
+    /**
+     * 将某节点及其子孙节点全部删除
+     */
+    const getDeleteIds = (treeSelectData: any, id: any) => {
+      // console.log(treeSelectData, id);
+      // 遍历数组，即遍历某一层节点
+      for (let i = 0; i < treeSelectData.length; i++) {
+        const node = treeSelectData[i];
+        if (node.id === id) {
+
+          ids.push(id);
+
+          const children = node.children;
+          if (Tool.isNotEmpty(children)) {
+            for (let j = 0; j < children.length; j++) {
+              getDeleteIds(children, children[j].id)
+            }
+          }
+        } else {
+          // 如果当前节点不是目标节点，则到其子节点再找找看。
+          const children = node.children;
+          if (Tool.isNotEmpty(children)) {
+            getDeleteIds(children, id);
+          }
+        }
+      }
+    };
+
     onMounted(()=>{
       console.log("onMounted");
       handleQuery();
@@ -306,7 +337,8 @@ export default defineComponent({
       modalLoading,
       handleModalOk,
       handleDelete,
-      setDisable
+      setDisable,
+      getDeleteIds
 
     };
   },
