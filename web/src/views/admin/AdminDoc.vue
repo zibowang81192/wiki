@@ -192,7 +192,7 @@ export default defineComponent({
     const handleQuery=()=>{
       loading.value = true;
       level1.value = [];
-      axios.get("/Doc/all").then((response)=>{
+      axios.get("/Doc/all/" + route.query.ebookId).then((response)=>{
         loading.value = false;
         const data = response.data;
         if(data.success){
