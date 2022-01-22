@@ -168,6 +168,9 @@ export default defineComponent({
 
     level1.value = [];
 
+    const treeSelectData = ref();
+    treeSelectData.value = [];
+
     const param = ref();
     param.value={};
 
@@ -202,6 +205,9 @@ export default defineComponent({
           level1.value = [];
           level1.value = Tool.array2Tree(docs.value, 0);
           console.log("树形结构：", level1.value);
+
+          treeSelectData.value = Tool.copy(level1.value);
+          treeSelectData.value.unshift({id: 0, name: '无'});
         }
         else {
           message.error(data.message);
@@ -230,8 +236,6 @@ export default defineComponent({
      */
     const doc = ref();
     doc.value = {};
-    const treeSelectData = ref();
-    treeSelectData.value = [];
 
     const modalVisible = ref<boolean>(false);
     const modalLoading = ref<boolean>(false);
