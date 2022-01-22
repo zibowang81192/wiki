@@ -85,23 +85,6 @@
           >
           </a-tree-select>
         </a-form-item>
-        <a-form-item label="parent">
-          <a-input v-model:value="doc.parent" />
-          <a-select
-              ref="select"
-              v-model:value="doc.parent"
-              style="width: 120px"
-              @focus="focus"
-              @change="handleChange"
-          >
-            <a-select-option value="0">无</a-select-option>
-            <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="doc.id === c.id">
-              {{c.name}}
-            </a-select-option>
-
-          </a-select>
-
-        </a-form-item>
         <a-form-item label="sort">
           <a-input v-model:value="doc.sort" />
         </a-form-item>
@@ -118,6 +101,7 @@ import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-v
 import axios from 'axios';
 import {message} from "ant-design-vue";
 import {Tool} from "@/util/tool";
+import {useRoute} from "vue-router";
 
 const listData: Record<string, string>[] = [];
 
@@ -144,6 +128,16 @@ export default defineComponent({
 
   setup() {
     console.log("setup");
+
+    const route = useRoute();
+
+    console.log("路由：", route);
+    console.log("route.path：", route.path);
+    console.log("route.query：", route.query);
+    console.log("route.param：", route.params);
+    console.log("route.fullPath：", route.fullPath);
+    console.log("route.name：", route.name);
+    console.log("route.meta：", route.meta);
 
     const level1 =  ref();
 
@@ -241,7 +235,9 @@ export default defineComponent({
 
     const add = () => {
       modalVisible.value = true;
-      doc.value = {};
+      doc.value = {
+        ebookId: route.query.ebookId
+      };
       //不能选择自身及其子节点作为父节点
       treeSelectData.value = Tool.copy(level1.value);
       // 为选择树添加一个“无”
