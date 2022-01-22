@@ -88,6 +88,9 @@
         <a-form-item label="sort">
           <a-input v-model:value="doc.sort" />
         </a-form-item>
+        <a-form-item label="content">
+          <div id="content"></div>
+        </a-form-item>
       </a-form>
     </a-modal>
 
@@ -103,6 +106,7 @@ import {message, Modal} from "ant-design-vue";
 import {Tool} from "@/util/tool";
 import {useRoute} from "vue-router";
 import {ExclamationCircleOutlined} from "@ant-design/icons";
+import E from 'wangeditor';
 
 const listData: Record<string, string>[] = [];
 
@@ -204,6 +208,8 @@ export default defineComponent({
     const modalVisible = ref<boolean>(false);
     const modalLoading = ref<boolean>(false);
 
+    const editor = new E('#content');
+
     const handleModalOk = () => {
       modalLoading.value = true;
       axios.post("/Doc/save",
@@ -233,9 +239,14 @@ export default defineComponent({
 
       // 为选择树添加一个“无”
       treeSelectData.value.unshift({id: 0, name: '无'});
+
+      setTimeout(function (){
+        editor.create();
+      })
     }
 
     const add = () => {
+
       modalVisible.value = true;
       doc.value = {
         ebookId: route.query.ebookId
@@ -244,6 +255,10 @@ export default defineComponent({
       treeSelectData.value = Tool.copy(level1.value);
       // 为选择树添加一个“无”
       treeSelectData.value.unshift({id: 0, name: '无'});
+      setTimeout(function (){
+        editor.create();
+      })
+
     }
 
     const handleDelete = (id: number) =>{
