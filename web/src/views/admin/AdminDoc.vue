@@ -209,6 +209,21 @@ export default defineComponent({
 
       });
     }
+    /**
+     * 查找content
+     */
+    const handleContentQuery=()=>{
+      axios.get("/Doc/find-content/" + doc.value.id).then((response)=>{
+        const data = response.data;
+        if(data.success){
+          editor.txt.html(data.content);
+        }
+        else {
+          message.error(data.message);
+        }
+
+      });
+    }
 
     /**
      *  编辑
@@ -231,8 +246,8 @@ export default defineComponent({
           doc.value).then((response)=> {
         const data = response.data;
         if(data.success){  /** data的类型是CommonResp **/
-          modalVisible.value = false;
-
+          //modalVisible.value = false;
+          message.success("保存成功");
 
           //重新加载列表
           handleQuery();
@@ -245,8 +260,12 @@ export default defineComponent({
     };
 
     const edit = (record: any) => {
+
+      editor.txt.html("");
+
       modalVisible.value = true;
       doc.value = Tool.copy(record);
+      handleContentQuery()
 
       //不能选择自身及其子节点作为父节点
       treeSelectData.value = Tool.copy(level1.value);
@@ -262,6 +281,8 @@ export default defineComponent({
     }
 
     const add = () => {
+
+      editor.txt.html("");
 
       modalVisible.value = true;
       doc.value = {
@@ -427,7 +448,8 @@ export default defineComponent({
       setDisable,
       getDeleteIds,
       showConfirm,
-      getDeleteNames
+      getDeleteNames,
+      handleContentQuery
 
     };
   },
