@@ -17,7 +17,7 @@
 
       </a-col>
       <a-col :span="18">
-        <div :innerHTML="html"></div>
+        <div class="wangeditor" :innerHTML="html"></div>
 
       </a-col>
     </a-row>
@@ -390,3 +390,33 @@ export default defineComponent({
 });
 
 </script>
+
+<style>
+/**
+wangeditor 默认样式
+ */
+  .wangeditor table {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+  }
+  .wangeditor table td,
+  .wangeditor table th {
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 3px 5px;
+  }
+  .wangeditor table th {
+    border-bottom: 2px solid #ccc;
+    text-align: center;
+  }
+
+  /*
+  和antdv p冲突，覆盖掉
+   */
+  .wangeditor blockquote p {
+    font-family: "YouYuan";
+    margin: 20px 10px !important;
+    font-size: 16px !important;
+    font-weight: 600;
+  }
+</style>
