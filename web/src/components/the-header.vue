@@ -19,6 +19,9 @@
       <a-menu-item key="4">
         <router-link to="/admin/category">CategoryAdmin</router-link>
       </a-menu-item>
+      <a-menu-item key="5">
+        <router-link to="/admin/user">UserAdmin</router-link>
+      </a-menu-item>
     </a-menu>
   </a-layout-header>
 </template>

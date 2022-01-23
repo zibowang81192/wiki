@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.wangzb.wiki.domain.User">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="password" jdbcType="CHAR" property="password" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, login_name, `password`
+    id, login_name, `name`, `password`
   </sql>
   <select id="selectByExample" parameterType="com.wangzb.wiki.domain.UserExample" resultMap="BaseResultMap">
     select
@@ -98,10 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.wangzb.wiki.domain.User">
-    insert into user (id, login_name, `password`
-      )
-    values (#{id,jdbcType=BIGINT}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=CHAR}
-      )
+    insert into user (id, login_name, `name`, 
+      `password`)
+    values (#{id,jdbcType=BIGINT}, #{loginName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{password,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wangzb.wiki.domain.User">
     insert into user
@@ -111,6 +112,9 @@
       </if>
       <if test="loginName != null">
         login_name,
+      </if>
+      <if test="name != null">
+        `name`,
       </if>
       <if test="password != null">
         `password`,
@@ -122,6 +126,9 @@
       </if>
       <if test="loginName != null">
         #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
       <if test="password != null">
         #{password,jdbcType=CHAR},
@@ -143,6 +150,9 @@
       <if test="record.loginName != null">
         login_name = #{record.loginName,jdbcType=VARCHAR},
       </if>
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
       <if test="record.password != null">
         `password` = #{record.password,jdbcType=CHAR},
       </if>
@@ -155,6 +165,7 @@
     update user
     set id = #{record.id,jdbcType=BIGINT},
       login_name = #{record.loginName,jdbcType=VARCHAR},
+      `name` = #{record.name,jdbcType=VARCHAR},
       `password` = #{record.password,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -166,6 +177,9 @@
       <if test="loginName != null">
         login_name = #{loginName,jdbcType=VARCHAR},
       </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
       <if test="password != null">
         `password` = #{password,jdbcType=CHAR},
       </if>
@@ -175,6 +189,7 @@
   <update id="updateByPrimaryKey" parameterType="com.wangzb.wiki.domain.User">
     update user
     set login_name = #{loginName,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
       `password` = #{password,jdbcType=CHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
