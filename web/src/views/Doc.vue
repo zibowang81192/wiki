@@ -10,6 +10,7 @@
           @select="onSelect"
           :replaceFields="{title: 'name', key: 'id', value: 'id'}"
           :defaultExpandAll="true"
+          :defaultSelectedKeys="defaultSelectedKey"
         >
 
 
@@ -72,6 +73,10 @@ export default defineComponent({
     console.log("route.name：", route.name);
     console.log("route.meta：", route.meta);
 
+    const defaultSelectedKeys = ref();
+
+    defaultSelectedKeys.value = [];
+
     const level1 =  ref();
 
     level1.value = [];
@@ -99,26 +104,6 @@ export default defineComponent({
       }
     ];
 
-    const handleQuery=()=>{
-      loading.value = true;
-      level1.value = [];
-      axios.get("/Doc/all/" + route.query.ebookId).then((response)=>{
-        loading.value = false;
-        const data = response.data;
-        if(data.success){
-          docs.value = data.content;
-          console.log("原始数组: ", docs.value);
-
-          level1.value = [];
-          level1.value = Tool.array2Tree(docs.value, 0);
-          console.log("树形结构：", level1.value);
-        }
-        else {
-          message.error(data.message);
-        }
-
-      });
-    }
     /**
      * 查找content
      */
@@ -134,6 +119,35 @@ export default defineComponent({
 
       });
     }
+
+    const handleQuery=()=>{
+      loading.value = true;
+      level1.value = [];
+      axios.get("/Doc/all/" + route.query.ebookId).then((response)=>{
+        loading.value = false;
+        const data = response.data;
+        if(data.success){
+          docs.value = data.content;
+          console.log("原始数组: ", docs.value);
+
+          level1.value = [];
+          level1.value = Tool.array2Tree(docs.value, 0);
+          console.log("树形结构：", level1.value);
+
+          if(Tool.isNotEmpty(level1)) {
+            defaultSelectedKeys.value = [level1.value[0].id];
+            handleQueryContent(level1.value[0].id);
+            // 初始显示文档信息
+            doc.value = level1.value[0];
+          }
+        }
+        else {
+          message.error(data.message);
+        }
+
+      });
+    }
+
 
     /**
      *  编辑
@@ -383,7 +397,8 @@ export default defineComponent({
       showConfirm,
       getDeleteNames,
       handleContentQuery,
-      onSelect
+      onSelect,
+      defaultSelectedKeys
 
     };
   },
