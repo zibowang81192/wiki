@@ -302,7 +302,8 @@ export default defineComponent({
         ebookId: route.query.ebookId
       };
       //不能选择自身及其子节点作为父节点
-      treeSelectData.value = Tool.copy(level1.value);
+      treeSelectData.value = Tool.copy(level1.value)|| [];
+      console.log("treeSelectData.value的内容："+treeSelectData.value);
       // 为选择树添加一个“无”
       treeSelectData.value.unshift({id: 0, name: '无'});
       // setTimeout(function (){
