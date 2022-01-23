@@ -17,6 +17,7 @@
 
       </a-col>
       <a-col :span="18">
+        <div :innerHTML="html"></div>
 
       </a-col>
     </a-row>
@@ -79,6 +80,8 @@ export default defineComponent({
     param.value={};
 
     const docs = ref();
+
+    const html = ref();
 
     const loading =ref(false);
 
@@ -218,6 +221,28 @@ export default defineComponent({
     };
 
     /**
+     * 内容查询
+     */
+    const handleQueryContent = (id: number) => {
+      axios.get("/Doc/find-content/" + id).then((response) =>{
+        const data = response.data;
+        if(data.success) {
+          html.value = data.content;
+        }
+        else{
+          message.error(data.message);
+        }
+      })
+    }
+
+    const onSelect = (selectedKeys: any, info: any) => {
+      console.log('selected', selectedKeys, info);
+      if (Tool.isNotEmpty(selectedKeys)) {
+        handleQueryContent(selectedKeys[0]);
+      }
+    }
+
+    /**
      * 二次确认删除
      */
     const names: Array<string> = [];
@@ -344,6 +369,7 @@ export default defineComponent({
       treeSelectData,
       columns,
       loading,
+      html,
       handleQuery,
 
       edit,
@@ -356,7 +382,8 @@ export default defineComponent({
       getDeleteIds,
       showConfirm,
       getDeleteNames,
-      handleContentQuery
+      handleContentQuery,
+      onSelect
 
     };
   },
