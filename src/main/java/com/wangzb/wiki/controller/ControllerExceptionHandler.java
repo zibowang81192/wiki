@@ -1,5 +1,6 @@
 package com.wangzb.wiki.controller;
 
+import com.wangzb.wiki.exception.BusinessException;
 import com.wangzb.wiki.resp.CommonResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,21 +31,21 @@ public class ControllerExceptionHandler {
         commonResp.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return commonResp;
     }
+    /**
+     * 校验异常统一处理
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = BusinessException.class)
+    @ResponseBody
+    public CommonResp validExceptionHandler(BusinessException e) {
+        CommonResp commonResp = new CommonResp();
+        LOG.warn("业务异常：{}", e.getCode().getDesc());
+        commonResp.setSuccess(false);
+        commonResp.setMessage(e.getCode().getDesc());
+        return commonResp;
+    }
 
-//    /**
-//     * 校验异常统一处理
-//     * @param e
-//     * @return
-//     */
-//    @ExceptionHandler(value = BusinessException.class)
-//    @ResponseBody
-//    public CommonResp validExceptionHandler(BusinessException e) {
-//        CommonResp commonResp = new CommonResp();
-//        LOG.warn("业务异常：{}", e.getCode().getDesc());
-//        commonResp.setSuccess(false);
-//        commonResp.setMessage(e.getCode().getDesc());
-//        return commonResp;
-//    }
 
     /**
      * 校验异常统一处理
