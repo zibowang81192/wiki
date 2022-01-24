@@ -1,9 +1,11 @@
 package com.wangzb.wiki.controller;
 
+import com.wangzb.wiki.req.UserLoginReq;
 import com.wangzb.wiki.req.UserQueryReq;
 import com.wangzb.wiki.req.UserResetPasswordReq;
 import com.wangzb.wiki.req.UserSaveReq;
 import com.wangzb.wiki.resp.CommonResp;
+import com.wangzb.wiki.resp.UserLoginResp;
 import com.wangzb.wiki.resp.UserQueryResp;
 import com.wangzb.wiki.resp.PageResp;
 import com.wangzb.wiki.service.UserService;
@@ -47,6 +49,15 @@ public class UserController {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         CommonResp resp = new CommonResp<>();
         userService.resetPassword(req);
+        return resp;
+    }
+
+    @PostMapping("/login")
+    public CommonResp login(@Valid @RequestBody UserLoginReq req){
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonResp<UserLoginResp> resp = new CommonResp<>();
+        UserLoginResp userLoginResp = userService.login(req);
+        resp.setContent(userLoginResp);
         return resp;
     }
 
