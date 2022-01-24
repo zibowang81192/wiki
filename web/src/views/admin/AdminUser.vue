@@ -174,7 +174,8 @@
       const handleModalOk = () => {
         modalLoading.value = true;
 
-        // user.value.password = hexMd5(user.value.password + KEY);
+        user.value.password = hexMd5(user.value.password + KEY);
+        console.log("加密字符串:"+user.value.password);
 
         axios.post("/User/save", user.value).then((response) => {
           modalLoading.value = false;
