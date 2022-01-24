@@ -1,6 +1,7 @@
 package com.wangzb.wiki.controller;
 
 import com.wangzb.wiki.req.UserQueryReq;
+import com.wangzb.wiki.req.UserResetPasswordReq;
 import com.wangzb.wiki.req.UserSaveReq;
 import com.wangzb.wiki.resp.CommonResp;
 import com.wangzb.wiki.resp.UserQueryResp;
@@ -40,6 +41,15 @@ public class UserController {
         userService.save(req);
         return resp;
     }
+
+    @PostMapping("/reset-password")
+    public CommonResp resetPassword(@Valid @RequestBody UserResetPasswordReq req){
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonResp resp = new CommonResp<>();
+        userService.resetPassword(req);
+        return resp;
+    }
+
     @DeleteMapping("/delete/{id}")
     public CommonResp delete(@PathVariable long id){
         CommonResp resp = new CommonResp<>();

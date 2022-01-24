@@ -8,6 +8,7 @@ import com.wangzb.wiki.exception.BusinessException;
 import com.wangzb.wiki.exception.BusinessExceptionCode;
 import com.wangzb.wiki.mapper.UserMapper;
 import com.wangzb.wiki.req.UserQueryReq;
+import com.wangzb.wiki.req.UserResetPasswordReq;
 import com.wangzb.wiki.req.UserSaveReq;
 import com.wangzb.wiki.resp.UserQueryResp;
 import com.wangzb.wiki.resp.PageResp;
@@ -96,6 +97,15 @@ public class UserService {
             user.setPassword(null);
             userMapper.updateByPrimaryKeySelective(user);
         }
+
+    }
+
+    /**
+     * 重置密码
+     */
+    public void resetPassword(UserResetPasswordReq req){
+        User user = CopyUtil.copy(req, User.class);
+        userMapper.updateByPrimaryKeySelective(user);
 
     }
 
