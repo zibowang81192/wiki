@@ -22,7 +22,10 @@
       <a-menu-item key="5">
         <router-link to="/admin/user">UserAdmin</router-link>
       </a-menu-item>
-      <a class="login-menu" @click="showLoginModal">
+      <a class="login-menu" v-show="!!user.name">
+        <span>您好：{{user.name}}</span>
+      </a>
+      <a class="login-menu" @click="showLoginModal" v-show="!user.name">
         <span>login</span>
       </a>
     </a-menu>
@@ -66,6 +69,11 @@ export default defineComponent({
       loginName: "test",
       password: "test"
     });
+
+    //登陆后保存
+    const user = ref();
+    user.value = {};
+
     const loginModalVisible = ref(false);
     const loginModalLoading = ref(false);
     const showLoginModal = () => {
@@ -83,6 +91,7 @@ export default defineComponent({
         if (data.success) {
           loginModalVisible.value = false;
           message.success("登录成功！");
+          user.value = data.content;
 
         } else {
           message.error(data.message);
@@ -97,6 +106,7 @@ export default defineComponent({
       showLoginModal,
       loginUser,
       login,
+      user
     }
   }
 });
