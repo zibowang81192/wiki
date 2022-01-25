@@ -72,8 +72,7 @@ export default defineComponent({
     });
 
     //登陆后保存
-    const user = ref();
-    user.value = {};
+    const user = computed(() => store.state.user);
 
     const loginModalVisible = ref(false);
     const loginModalLoading = ref(false);
@@ -92,7 +91,6 @@ export default defineComponent({
         if (data.success) {
           loginModalVisible.value = false;
           message.success("登录成功！");
-          user.value = data.content;
           store.commit("setUser",user.value);
 
         } else {

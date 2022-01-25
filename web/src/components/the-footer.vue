@@ -1,6 +1,7 @@
 <template>
   <a-layout-footer style="text-align: center">
-    Welcome {{user.name}}<br>
+    <span v-show="user.id">Welcome {{user.name}}<br></span>
+
     Wiki ©2022 Created by Zibo Wang
   </a-layout-footer>
 </template>
