@@ -22,9 +22,22 @@
       <a-menu-item key="5">
         <router-link to="/admin/user">UserAdmin</router-link>
       </a-menu-item>
+
+      <a-popconfirm
+          title="确认退出登录?"
+          ok-text="是"
+          cancel-text="否"
+          @confirm="logout()"
+      >
+        <a class="login-menu" v-show="!!user.name">
+          <span>退出登录</span>
+        </a>
+      </a-popconfirm>
+
       <a class="login-menu" v-show="!!user.name">
         <span>您好：{{user.name}}</span>
       </a>
+
       <a class="login-menu" @click="showLoginModal" v-show="!user.name">
         <span>login</span>
       </a>
@@ -91,13 +104,28 @@ export default defineComponent({
         if (data.success) {
           loginModalVisible.value = false;
           message.success("登录成功！");
-          store.commit("setUser",user.value);
+          store.commit("setUser",data.content);
 
         } else {
           message.error(data.message);
         }
       });
     };
+    //  退出登录
+    const logout = () => {
+      console.log("退出登录开始");
+
+      axios.get('/User/logout/' + user.value.token).then((response) => {
+        const data = response.data;
+        if (data.success) {
+          message.success("退出成功！");
+          store.commit("setUser", {});
+        } else {
+          message.error(data.message);
+        }
+      });
+    };
+
 
 
     return {
@@ -106,6 +134,7 @@ export default defineComponent({
       showLoginModal,
       loginUser,
       login,
+      logout,
       user
     }
   }
@@ -116,6 +145,7 @@ export default defineComponent({
 .login-menu {
   float: right;
   color: white;
+  padding-left: 10px;
 }
 
 </style>
