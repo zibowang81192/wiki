@@ -7,6 +7,7 @@ import com.wangzb.wiki.domain.Doc;
 import com.wangzb.wiki.domain.DocExample;
 import com.wangzb.wiki.mapper.ContentMapper;
 import com.wangzb.wiki.mapper.DocMapper;
+import com.wangzb.wiki.mapper.DocMapperCust;
 import com.wangzb.wiki.req.DocQueryReq;
 import com.wangzb.wiki.req.DocSaveReq;
 import com.wangzb.wiki.resp.DocQueryResp;
@@ -28,6 +29,9 @@ public class DocService {
 
     @Resource
     private DocMapper docMapper;
+
+    @Resource
+    private DocMapperCust docMapperCust;
 
     @Resource
     private ContentMapper contentMapper;
@@ -99,6 +103,8 @@ public class DocService {
         if(ObjectUtils.isEmpty(req.getId())){
             //新增
             doc.setId(snowFlake.nextId());
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
             docMapper.insert(doc);
             content.setId(doc.getId());
             contentMapper.insert(content);
@@ -121,6 +127,8 @@ public class DocService {
 
     public String findContent(long id){
         Content content = contentMapper.selectByPrimaryKey(id);
+        // 文档阅读数 + 1
+        docMapperCust.increaseViewCount(id);
         if(ObjectUtils.isEmpty(content)){
             return "";
         }
