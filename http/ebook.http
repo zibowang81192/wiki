@@ -14,7 +14,6 @@ GET http://localhost:8880/Ebook/list?page=1&size=4&name=Java
 
 POST http://localhost:8880/Ebook/save
 Accept: application/json
-{}
 
 ###
 GET http://localhost:8880/User/list
