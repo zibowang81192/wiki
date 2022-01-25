@@ -56,12 +56,20 @@ public class DocController {
         docService.save(req);
         return resp;
     }
+
     @DeleteMapping("/delete/{idsStr}")
     public CommonResp delete(@PathVariable String idsStr){
         CommonResp resp = new CommonResp<>();
         List<String> list = Arrays.asList(idsStr.split(","));
         docService.delete(list);
         return resp;
+    }
+
+    @GetMapping("/vote/{id}")
+    public CommonResp vote(@PathVariable Long id) {
+        CommonResp commonResp = new CommonResp();
+        docService.vote(id);
+        return commonResp;
     }
 
 }

@@ -5,6 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.wangzb.wiki.domain.Content;
 import com.wangzb.wiki.domain.Doc;
 import com.wangzb.wiki.domain.DocExample;
+import com.wangzb.wiki.exception.BusinessException;
+import com.wangzb.wiki.exception.BusinessExceptionCode;
 import com.wangzb.wiki.mapper.ContentMapper;
 import com.wangzb.wiki.mapper.DocMapper;
 import com.wangzb.wiki.mapper.DocMapperCust;
@@ -18,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.servlet.support.RequestContext;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -145,5 +148,12 @@ public class DocService {
         criteria.andIdIn(ids);
 
         docMapper.deleteByExample(docExample);
+    }
+
+    /**
+     * 点赞
+     */
+    public void vote(Long id) {
+        docMapperCust.increaseVoteCount(id);
     }
 }
