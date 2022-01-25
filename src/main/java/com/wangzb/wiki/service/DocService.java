@@ -15,12 +15,14 @@ import com.wangzb.wiki.req.DocSaveReq;
 import com.wangzb.wiki.resp.DocQueryResp;
 import com.wangzb.wiki.resp.PageResp;
 import com.wangzb.wiki.util.CopyUtil;
+import com.wangzb.wiki.util.RedisUtil;
+import com.wangzb.wiki.util.RequestContext;
 import com.wangzb.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.servlet.support.RequestContext;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -42,6 +44,9 @@ public class DocService {
 
     @Resource
     private SnowFlake snowFlake;
+
+    @Resource
+    private RedisUtil redisUtil;
 
     public PageResp<DocQueryResp> list(DocQueryReq docReq){
         DocExample docExample = new DocExample();
@@ -154,6 +159,14 @@ public class DocService {
      * 点赞
      */
     public void vote(Long id) {
-        docMapperCust.increaseVoteCount(id);
+        // docMapperCust.increaseVoteCount(id);
+        // 远程IP+doc.id作为key，24小时内不能重复
+        String ip = RequestContext.getRemoteAddr();
+        if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 5000)) {
+            docMapperCust.increaseVoteCount(id);
+        } else {
+            throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
+        }
+
     }
 }
