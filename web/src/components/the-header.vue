@@ -14,13 +14,13 @@
         <router-link to="/">Home</router-link>
       </a-menu-item>
       <a-menu-item key="3">
-        <router-link to="/admin/ebook">EbookAdmin</router-link>
+        <router-link to="/admin/ebook" :style="user.id?{}:{display: 'none'}">EbookAdmin</router-link>
       </a-menu-item>
       <a-menu-item key="4">
-        <router-link to="/admin/category">CategoryAdmin</router-link>
+        <router-link to="/admin/category" :style="user.id?{}:{display: 'none'}">CategoryAdmin</router-link>
       </a-menu-item>
       <a-menu-item key="5">
-        <router-link to="/admin/user">UserAdmin</router-link>
+        <router-link to="/admin/user" :style="user.id?{}:{display: 'none'}">UserAdmin</router-link>
       </a-menu-item>
 
       <a-popconfirm
