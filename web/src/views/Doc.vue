@@ -19,6 +19,14 @@
 
       </a-col>
       <a-col :span="18">
+        <div>
+          <h2>{{doc.name}}</h2>
+          <div>
+            <span>阅读数：{{doc.viewCount}}</span> &nbsp; &nbsp;
+            <span>点赞数：{{doc.voteCount}}</span>
+          </div>
+          <a-divider style="height: 2px; background-color: #9999cc"/>
+        </div>
         <div class="wangeditor" :innerHTML="html"></div>
 
       </a-col>
@@ -253,6 +261,8 @@ export default defineComponent({
     const onSelect = (selectedKeys: any, info: any) => {
       console.log('selected', selectedKeys, info);
       if (Tool.isNotEmpty(selectedKeys)) {
+        // 选中某一个节点时，加载该节点的文档信息
+        doc.value = info.selectedNodes[0].props;
         handleQueryContent(selectedKeys[0]);
       }
     }
