@@ -179,7 +179,8 @@ public class DocService {
         // 点赞后推送消息
         Doc docDb = docMapper.selectByPrimaryKey(id);
 //        webSocketServer.sendInfo("【" +docDb.getName()+ "】" + " 被点赞！");
-        wsService.sendInfo("【" +docDb.getName()+ "】" + " 被点赞！");
+        String logId = MDC.get("LOG_ID");
+        wsService.sendInfo("【" +docDb.getName()+ "】" + " 被点赞！", logId);
 
 
     }
