@@ -22,6 +22,7 @@ import com.wangzb.wiki.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -51,6 +52,9 @@ public class DocService {
 
     @Resource
     private WebSocketServer webSocketServer;
+
+    @Resource
+    private WsService wsService;
 
     public PageResp<DocQueryResp> list(DocQueryReq docReq){
         DocExample docExample = new DocExample();
@@ -174,11 +178,11 @@ public class DocService {
 
         // 点赞后推送消息
         Doc docDb = docMapper.selectByPrimaryKey(id);
-        webSocketServer.sendInfo("【" +docDb.getName()+ "】" + " 被点赞！");
+//        webSocketServer.sendInfo("【" +docDb.getName()+ "】" + " 被点赞！");
+        wsService.sendInfo("【" +docDb.getName()+ "】" + " 被点赞！");
 
 
     }
-
     public void updateEbookInfo(){
         docMapperCust.updateEbookInfo();
     }
