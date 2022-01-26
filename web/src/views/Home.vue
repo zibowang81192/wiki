@@ -33,10 +33,18 @@
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
-          <span v-for="{ type, text } in actions" :key="type">
-            <component v-bind:is="type" style="margin-right: 8px" />
-            {{ text }}
-          </span>
+          <span>
+                <component v-bind:is="'FileOutlined'" style="margin-right: 8px" />
+                {{ item.docCount }}
+              </span>
+              <span>
+                <component v-bind:is="'UserOutlined'" style="margin-right: 8px" />
+                {{ item.viewCount }}
+              </span>
+              <span>
+                <component v-bind:is="'LikeOutlined'" style="margin-right: 8px" />
+                {{ item.voteCount }}
+              </span>
             </template>
 
             <a-list-item-meta :description="item.description">
@@ -58,10 +66,11 @@
 
 <script lang="ts">
 import {defineComponent, onMounted, reactive, ref, toRef} from 'vue';
-import { StarOutlined, LikeOutlined, MessageOutlined, MailOutlined} from '@ant-design/icons-vue';
+import { FileOutlined, LikeOutlined, UserOutlined,MessageOutlined, MailOutlined} from '@ant-design/icons-vue';
 import axios from 'axios';
 import {Tool} from "@/util/tool";
 import {message} from "ant-design-vue";
+import {StarOutlined} from "@ant-design/icons";
 
 // const listData: Record<string, string>[] = [];
 //
@@ -81,7 +90,8 @@ export default defineComponent({
   name: 'Home',
 
   components: {
-    StarOutlined,
+    FileOutlined,
+    UserOutlined,
     LikeOutlined,
     MessageOutlined,
     MailOutlined
@@ -97,11 +107,11 @@ export default defineComponent({
       },
       pageSize: 3,
     };
-    const actions: Record<string, string>[] = [
-      { type: 'StarOutlined', text: '156' },
-      { type: 'LikeOutlined', text: '156' },
-      { type: 'MessageOutlined', text: '7' },
-    ];
+    // const actions: Record<string, string>[] = [
+    //   { type: 'StarOutlined', text: '156' },
+    //   { type: 'LikeOutlined', text: '156' },
+    //   { type: 'MessageOutlined', text: '7' },
+    // ];
 
     const handleQuery=(params:any)=>{
       axios.get("/Ebook/list",
@@ -172,7 +182,6 @@ export default defineComponent({
     return {
       ebooks,
       pagination,
-      actions,
       level1,
       isShowWelcome,
 
