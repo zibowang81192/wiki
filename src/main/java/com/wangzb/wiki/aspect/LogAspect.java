@@ -3,6 +3,7 @@ package com.wangzb.wiki.aspect;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import com.wangzb.wiki.util.RequestContext;
+import com.wangzb.wiki.util.SnowFlake;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -33,14 +34,14 @@ public class LogAspect {
     @Pointcut("execution(public * com.wangzb.*.controller..*Controller.*(..))")
     public void controllerPointcut() {}
 
-//    @Resource
-//    private SnowFlake snowFlake;
+    @Resource
+    private SnowFlake snowFlake;
 
     @Before("controllerPointcut()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
 
-//        // 增加日志流水号
-//        MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));
+        // 增加日志流水号
+        MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));
 
         // 开始打印请求日志
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
