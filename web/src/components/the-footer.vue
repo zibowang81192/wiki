@@ -10,6 +10,7 @@
 import {computed, defineComponent, onMounted} from 'vue';
 import store from "@/store";
 import {Tool} from "@/util/tool";
+import {message, notification} from "ant-design-vue";
 
 export default defineComponent({
   name: 'the-footer',
@@ -26,10 +27,11 @@ export default defineComponent({
     };
     const onMessage = (event: any) => {
       console.log('WebSocket收到消息：', event.data);
-      // notification['info']({
-      //   message: '收到消息',
-      //   description: event.data,
-      // });
+      // message.success(event.data);
+      notification['info']({
+        message: '收到消息',
+        description: event.data,
+      });
     };
     const onError = () => {
       console.log('WebSocket连接错误，状态码：', websocket.readyState)
@@ -53,6 +55,7 @@ export default defineComponent({
         token = Tool.uuid(10);
         // 连接地址：ws://127.0.0.1:8880/ws/xxx
         websocket = new WebSocket(process.env.VUE_APP_WS_SERVER + '/ws/' + token);
+        initWebSocket();
 
         // 关闭
         // websocket.close();
