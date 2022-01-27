@@ -26,7 +26,8 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <div class="welcome" v-show="isShowWelcome">
-        <h1>Welcome to Zibo Wang's Wiki</h1>
+        <the-welcome></the-welcome>
+<!--        <h1>Welcome to Zibo Wang's Wiki</h1>-->
 
       </div>
       <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :data-source="ebooks">
@@ -70,7 +71,7 @@ import { FileOutlined, LikeOutlined, UserOutlined,MessageOutlined, MailOutlined}
 import axios from 'axios';
 import {Tool} from "@/util/tool";
 import {message} from "ant-design-vue";
-import {StarOutlined} from "@ant-design/icons";
+import TheWelcome from "@/components/the-welcome.vue";
 
 // const listData: Record<string, string>[] = [];
 //
@@ -90,6 +91,7 @@ export default defineComponent({
   name: 'Home',
 
   components: {
+    TheWelcome,
     FileOutlined,
     UserOutlined,
     LikeOutlined,
